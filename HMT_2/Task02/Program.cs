@@ -12,8 +12,21 @@ namespace Task02
     {
         public static void Main(string[] args)
         {
-            Console.Write("Введите действительное число h: ");
-            double h = Convert.ToDouble(Console.ReadLine());
+            double h;
+            while (true)
+            {
+                Console.Write("Введите действительное число h: ");
+                string bufS = Console.ReadLine();
+                if (Double.TryParse(bufS, out h))
+                {
+                    h = Double.Parse(bufS);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Неверный формат ввода, введите снова : ");
+                }
+            }
             double a = Math.Sqrt( (Math.Abs(Math.Sin(8*h)) + 17) / (Math.Pow((1 - Math.Sin(4 * h)*Math.Cos(Math.Pow(h,2) + 18)),2)));
             double b = 1 -Math.Sqrt(3 / (3+Math.Abs(Math.Tan(a*Math.Pow(h,2)) - Math.Sin(a * h))));
             double c = a * Math.Pow(h, 2) * Math.Sin(b * h) + b * Math.Pow(h, 3) * Math.Cos(a * h);

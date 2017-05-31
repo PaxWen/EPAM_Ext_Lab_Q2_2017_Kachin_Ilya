@@ -14,15 +14,54 @@ namespace Task01
     {
         public static void Main(string[] args)
         {
-            double x;
-            double y;
+            double x=0;
+            double y=0;
+            string a;
             bool b=false;
-            Console.Write("Введите X точки : ");
-            x=Convert.ToDouble(Console.ReadLine());
-            Console.Write("Введите Y точки : ");
-            y = Convert.ToDouble(Console.ReadLine());
-            Console.Write("Введите букву графика, которому должна принадлежать точка : ");
-            string a = Console.ReadLine();
+            while (true)
+            {
+                Console.Write("Введите X точки : ");
+                string bufS = Console.ReadLine();
+                if (Double.TryParse(bufS,out x))
+                {
+                    x = Double.Parse(bufS);
+                    break;
+                }else
+                {
+                    Console.WriteLine("Неверный формат ввода, введите снова : ");
+                }
+            }
+            while (true)
+            {
+                Console.Write("Введите Y точки : ");
+                string bufS = Console.ReadLine();
+                if (Double.TryParse(bufS, out y))
+                {
+                    y = Double.Parse(bufS);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Неверный формат ввода, введите снова : ");
+                }
+            }
+
+            while (true)
+            {
+                Console.Write("Введите букву графика, которому должна принадлежать точка : ");
+                string bufS = Console.ReadLine();
+                if ((bufS[0]>='а') &&(bufS[0] <= 'к')&&(bufS.Length==1))
+                {
+                    a = bufS;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("График не найден, введите снова : ");
+                }
+            }
+
+
             switch (a)
             {
                 case "а":
@@ -156,11 +195,6 @@ namespace Task01
                                 b = true;
                             }
                         }
-                        break;
-                    }
-                default:
-                    {
-                        Console.WriteLine("Данный график не найден");
                         break;
                     }
             }
