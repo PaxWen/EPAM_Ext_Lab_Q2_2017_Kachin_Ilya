@@ -12,9 +12,12 @@ namespace Task01
       */
     class Program
     {
-        public static void Main(string[] args)
+        public static void Main(string[] args)//todo pn не очень круто, что после прогона для одного графика консоль закрывается, лучше зациклить или по крайней мере спросить пользователя, хочет ли он продолжить
         {
-            double x=0;
+	        Console.InputEncoding = Encoding.Unicode;//todo pn без явного задания кодировки будет использована кодировка по умолчанию. Машина, на которой я проверяю настроена на английскую культуру, поэтому кириллические символы отображаются в ней как знаки вопроса. Следует учитывать такое специфичное поведение консоли в следующих заданиях :)/
+	        Console.OutputEncoding = Encoding.Unicode;
+
+			double x =0;
             double y=0;
             string a;
             bool b=false;
@@ -26,7 +29,7 @@ namespace Task01
                 {
                     x = Double.Parse(bufS);
                     break;
-                }else
+                }else//todo pn лишний else, можно без него (здесь и везде ниже)
                 {
                     Console.WriteLine("Неверный формат ввода, введите снова : ");
                 }
@@ -200,7 +203,7 @@ namespace Task01
             }
             if (b)
             {
-                Console.WriteLine("Точка ({0};{1}) принадлежит фигуре {2}", x, y, a);
+                Console.WriteLine("Точка ({0};{1}) принадлежит фигуре {2}", x, y, a);//todo pn лучше бы была одна строка WriteLine, а внутри бы уже в зависимости от значения b (оператор "? :") определять, нужно добавлять "не" или нет.
             }
             else
             {
