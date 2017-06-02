@@ -1,0 +1,5 @@
+C:\Users\Pax\Desktop\SSS\Task_01\HMT_2\bin\Debug\HMT_2.exe.config
+C:\Users\Pax\Desktop\SSS\Task_01\HMT_2\bin\Debug\HMT_2.exe
+C:\Users\Pax\Desktop\SSS\Task_01\HMT_2\bin\Debug\HMT_2.pdb
+C:\Users\Pax\Desktop\SSS\Task_01\HMT_2\obj\Debug\HMT_2.exe
+C:\Users\Pax\Desktop\SSS\Task_01\HMT_2\obj\Debug\HMT_2.pdb
