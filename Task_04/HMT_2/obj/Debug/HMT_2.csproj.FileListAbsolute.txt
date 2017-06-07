@@ -1,0 +1,6 @@
+C:\Users\Pax\Desktop\GitHubReposit\Task_04\HMT_2\bin\Debug\HMT_2.exe.config
+C:\Users\Pax\Desktop\GitHubReposit\Task_04\HMT_2\bin\Debug\HMT_2.exe
+C:\Users\Pax\Desktop\GitHubReposit\Task_04\HMT_2\bin\Debug\HMT_2.pdb
+C:\Users\Pax\Desktop\GitHubReposit\Task_04\HMT_2\obj\Debug\HMT_2.exe
+C:\Users\Pax\Desktop\GitHubReposit\Task_04\HMT_2\obj\Debug\HMT_2.pdb
+C:\Users\Pax\Desktop\GitHubReposit\Task_04\HMT_2\obj\Debug\HMT_2.csprojResolveAssemblyReference.cache
