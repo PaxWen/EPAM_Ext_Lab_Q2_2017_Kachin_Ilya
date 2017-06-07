@@ -16,7 +16,7 @@ namespace HMT_2
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
             int N;
-            Console.Write("Введите целочисленное N: ");
+            Console.Write("Введите целочисленное N: ");//todo pn строка дублируется
             string buf;
             while (true)
             {

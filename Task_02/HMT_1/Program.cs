@@ -33,7 +33,7 @@ namespace HMT_1
                         break;
                     }
                 }
-                Console.Write("Ввод неверен, попробуйте снова: ");
+                Console.Write("Ввод неверен, попробуйте снова: ");//todo pn строка дублируется 
             }
             //
             Console.Write("Введите B: ");
