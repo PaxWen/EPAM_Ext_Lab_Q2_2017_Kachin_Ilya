@@ -1,0 +1,5 @@
+C:\Users\Pax\Desktop\GitHubReposit\Task_03\HMT_4\bin\Debug\HMT_4.exe.config
+C:\Users\Pax\Desktop\GitHubReposit\Task_03\HMT_4\bin\Debug\HMT_4.exe
+C:\Users\Pax\Desktop\GitHubReposit\Task_03\HMT_4\bin\Debug\HMT_4.pdb
+C:\Users\Pax\Desktop\GitHubReposit\Task_03\HMT_4\obj\Debug\HMT_4.exe
+C:\Users\Pax\Desktop\GitHubReposit\Task_03\HMT_4\obj\Debug\HMT_4.pdb
