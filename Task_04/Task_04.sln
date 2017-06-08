@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMT_01", "HMT_01\HMT_01.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMT_2", "HMT_2\HMT_2.csproj", "{1E771FB1-0B87-4156-9BC4-D03A66710EAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMT_3", "HMT_3\HMT_3.csproj", "{60B828F4-869F-4B02-8D25-1752FBAAF78D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1E771FB1-0B87-4156-9BC4-D03A66710EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E771FB1-0B87-4156-9BC4-D03A66710EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E771FB1-0B87-4156-9BC4-D03A66710EAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B828F4-869F-4B02-8D25-1752FBAAF78D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B828F4-869F-4B02-8D25-1752FBAAF78D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B828F4-869F-4B02-8D25-1752FBAAF78D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B828F4-869F-4B02-8D25-1752FBAAF78D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

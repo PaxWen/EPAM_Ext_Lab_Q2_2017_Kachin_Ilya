@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace HMT_2
 {
     class Program
-    {
+    {/*Написать программу, которая удваивает в первой введенной строки все символы,
+        принадлежащие второй введенной строке.*/
         static void Main(string[] args)
         {
             Console.InputEncoding = Encoding.Unicode;
@@ -27,7 +28,7 @@ namespace HMT_2
                 {
                     if (sentence2.Contains(sentence1[i]))
                     {
-                        sentence1.Insert(i,sentence1[i].ToString());
+                        sentence1=sentence1.Insert(i,sentence1[i].ToString());
                         i += 2;
                     }else
                     {
