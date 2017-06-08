@@ -23,9 +23,9 @@ namespace HMT_6
         {
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
-            List<TextView> t = new List<TextView>();
-            string buf;
-            int a;
+            List<TextView> t = new List<TextView>();//todo pn неговорящее именование переменной
+			string buf;
+            int a;//todo pn неговорящее именование переменной
             while (true)
             {
                 onConsole(t);
@@ -101,8 +101,8 @@ namespace HMT_6
             }
 
         }
-        static void onConsole(List<TextView> t)
-        {
+        static void onConsole(List<TextView> t)//todo pn неговорящее именование переменной
+		{
             Console.Write("Параметры надписи: ");
             for (int i = 0; i < t.Count; i++)
             {
