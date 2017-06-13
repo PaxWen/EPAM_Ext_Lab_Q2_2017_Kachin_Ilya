@@ -20,7 +20,7 @@ namespace HMT_3
             long sum2 = 0;
             var sw = new Stopwatch();
             int N = 100;
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < N; j++)//todo pn прогоняй styleCop по своим проектам. Очень много стилистических неточностей.
             {
                 str = "";
                 sb = new StringBuilder();
