@@ -25,7 +25,7 @@ namespace HMT_01
         public double Radius
         {
             get { return radius; }
-            set { radius = value; }
+            set { radius = value; }//todo pn а если пользователь задаст отрицательный радиус?
         }
         public double GetLength()
         {

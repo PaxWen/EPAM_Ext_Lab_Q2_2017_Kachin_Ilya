@@ -38,7 +38,7 @@ namespace HMT_2
         }
         public Triangle(double a,double b, double c)
         {
-            this.a = a;
+            this.a = a;//todo pn пользователь может задать стороны, из которых невозможно собрать треугольник. Необходима проверка на это.
             this.b = b;
             this.c = c;
         }
