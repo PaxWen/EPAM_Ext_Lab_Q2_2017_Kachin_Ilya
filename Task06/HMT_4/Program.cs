@@ -39,8 +39,8 @@ namespace HMT_4
                 {
                     if (Area[i][j] == 'h')
                     {
-                        Hero1 = new Hero(i,j,Area[i][j],"Hero",15);
-                    }
+                        Hero1 = new Hero(i,j,Area[i][j],"Hero",15);//todo pn чот не уловил логики создавать Area.Length раз героя в памяти
+					}
                     if (Area[i][j] == 'h')
                     {
                         Enemys.Add(new Enemy(i, j, Area[i][j], "Enemy", 15));

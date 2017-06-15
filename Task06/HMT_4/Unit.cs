@@ -16,7 +16,7 @@ namespace HMT_4
             get { return moveLogic; }
             set
             {
-                if ((value + 1 > 3) || (value < 0))
+                if ((value + 1 > 3) || (value < 0))//todo pn что за магические условия?
                 {
                     moveLogic = value;
                 }
@@ -26,15 +26,15 @@ namespace HMT_4
         {
             Core = new ObjectCoor(x, y, gist, type);
             this.HP = HP;
-            Live = true;
+            Live = true;//todo pn т.е. у тебя в игре на карте трупы будут валяться?)
         }
         public void Move(string MoveOption,string type)
         {
-            switch (MoveOption)
+            switch (MoveOption)//todo pn enum
             {
                 case "Up":
                     {
-                        moveOrInteraction(0, 1, type);
+                        moveOrInteraction(0, 1, type);//todo pn хардкод, а если мы его решим прокачать и он начнет носиться по карте?
                         break;
                     }
                 case "Left":
