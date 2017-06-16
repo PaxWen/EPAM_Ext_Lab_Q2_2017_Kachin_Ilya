@@ -24,6 +24,14 @@ namespace HMT_4
         {
             return (new MyString(a.ToString() + b.ToString()));
         }
+        public static MyString operator +(string a, MyString b)
+        {
+            return (new MyString(a + b.ToString()));
+        }
+        public static MyString operator +(MyString a, string b)
+        {
+            return (new MyString(a.ToString() + b));
+        }
         public static bool operator ==(MyString a, MyString b)
         {
             return a.stringArr.Equals(b.stringArr);
@@ -33,9 +41,23 @@ namespace HMT_4
             return !a.stringArr.Equals(b.stringArr);
         }
 
-        public new string ToString()
+        public override string ToString()
         {
             return new string(stringArr);
         }
+        public override bool Equals(object obj)
+        {
+            return this.GetHashCode() == obj.GetHashCode();
+        }
+        public override int GetHashCode()
+        {
+            int sum=0;
+            foreach (var item in stringArr)
+            {
+                sum += (int)item;
+            }
+            return sum;
+        }
+
     }
 }
