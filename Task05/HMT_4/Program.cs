@@ -25,6 +25,10 @@ namespace HMT_4
             Console.WriteLine("MyString1: {0}", myString1.ToString());
             Console.WriteLine("MyString1==MyString2: {0}",myString1==myString2);
             Console.WriteLine("MyString1!=MyString2: {0}", myString1 != myString2);
+            Console.WriteLine("Hcode (MyString1): {0}", myString1.GetHashCode());
+            Console.WriteLine("Hcode (MyString2): {0}", myString2.GetHashCode());
+            Console.WriteLine("MyString1.Equals(MyString2): {0}", myString1.Equals(myString2));
+            Console.WriteLine("MyString1.Equals(MyString1): {0}", myString1.Equals(myString1));
             Console.ReadKey();
         }
     }
