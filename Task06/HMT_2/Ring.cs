@@ -22,7 +22,7 @@ namespace HMT_2
         }
         public Ring(double x, double y, double rO,double rI)
         {
-            Outer = new Round(x, y, rO);
+            Outer = new Round(x, y, rO);//todo pn внешнее кольцо не может быть меньше внутреннего
             Inner = new Round(x, y, rI);
             this.X = x;
             this.Y = y;

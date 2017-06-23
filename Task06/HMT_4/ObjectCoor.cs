@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace HMT_4
 {
-    public class ObjectCoor
-    {
+    public class ObjectCoor//todo pn не очень хорошая реализация логики объект на карте - бонус - монстр - игрок. Лучше бы бонус и монстр тоже были отдельными классами. И в них вынести специфичные только им методы, а не городить всю логику в один moveOrInteraction
+	{
         private int x;
         private int y;
         private char gist;

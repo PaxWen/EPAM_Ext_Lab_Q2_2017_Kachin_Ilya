@@ -13,7 +13,7 @@ namespace HMT_4
         }
         public override void moveOrInteraction(int biasX, int biasY, string type)
         {
-           switch (type)
+           switch (type)//todo pn type должен быть enum в этом случае
             {
                 case "Space":
                     {

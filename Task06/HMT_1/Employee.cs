@@ -18,7 +18,7 @@ namespace HMT_1
         public string Position { get; set; }
         public Employee (string N, string SN, string P, DateTime B,DateTime WE, string Pos):base(N,SN,P,B)
         {
-            WorkExp = WE;
+            WorkExp = WE;//todo pn стаж не может быть больше возраста
             Position = Pos;
         }
         public Employee()
