@@ -47,6 +47,14 @@ namespace HMT_4
         }
         public override bool Equals(object obj)
         {
+            if (!(obj is MyString))
+            {
+                return false;
+            }
+            if (stringArr.Length != obj.ToString().Length)
+            {
+                return false;
+            }
             return this.GetHashCode() == obj.GetHashCode();
         }
         public override int GetHashCode()
