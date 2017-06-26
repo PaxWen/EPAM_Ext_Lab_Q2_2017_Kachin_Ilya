@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace HMT_2
 {
-    /*
+	/*
      * Задан английский текст. 
      * Выделить отдельные слова и для каждого посчитать частоту встречаемости. 
      * Слова, отличающиеся регистром, считать одинаковыми. 
      * В качестве разделителей считать пробел и точку.
      */
-    public class Program
+	public class Program
     {
-        public static void Main(string[] args)
-        {
+        public static void Main(string[] args)//todo pn "Слова, отличающиеся регистром, считать одинаковыми" переделай, сейчас для проги AS as As - разные слова.
+		{
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
             int sumWords = 0;

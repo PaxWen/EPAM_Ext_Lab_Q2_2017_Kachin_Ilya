@@ -24,7 +24,7 @@ namespace HMT_1
                     lPerson.Add(string.Format("PerNum{0}", i));
                 }
                 n = 0;
-                while (lPerson.Count > 1)
+                while (lPerson.Count > 1)//todo pn что то у тебя с выводом не то. Там в оставших и выбывших одни и те же люди. В конце должен остаться 1 человек.
                 {
                     n++;
                     Console.WriteLine("Круг №{0}", n);

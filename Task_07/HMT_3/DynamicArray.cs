@@ -116,7 +116,7 @@ namespace HMT_3
                 arr[index] = value;
             }
         }
-        public void AddRange(T[] arrItems)
+        public void AddRange(T[] arrItems)//todo pn упрости метод, очень много лишних условий.
         {
             if (arr.Length - capacity >= arrItems.Length)
             {
@@ -128,8 +128,8 @@ namespace HMT_3
                 return;
             }
             int multSegments = 1;
-            while ((arr.Length * multSegments*2) - capacity <= arrItems.Length)
-            {
+            while ((arr.Length * multSegments*2) - capacity <= arrItems.Length)//todo pn а теперь представь, что у тебя 1млн элементов в массиве, а добавить нужно 100. лучше вынести в константу число, на которое ты увеличиваешь массив каждый раз.
+			{
                 multSegments++;
             }
             multArray(multSegments);
@@ -168,7 +168,7 @@ namespace HMT_3
             {
                 arrbuf[i] = arr[i];
             }
-            arr = new T[arr.Length * multiplier*2];
+            arr = new T[arr.Length * multiplier*2];//todo pn где-то я такую логику уже видел, а значит, нужно вынести её в отдельный метод
             for (int i = 0; i < arrbuf.Length; i++)
             {
                 arr[i] = arrbuf[i];
