@@ -19,8 +19,8 @@ namespace HMT_2
                     {
                     Person bufPerson = ((object)item as Person);
                     Console.WriteLine();
-                    Console.WriteLine("[{0} пришёл в офис (время {1:t})]", bufPerson.Name, time);
-                    OnAdd?.Invoke(this, new EventsArgsWorks() {Name = bufPerson.Name,Time = time });
+                    Console.WriteLine("[{0} пришёл в офис (время {1:t})]", bufPerson.Name, time);//todo pn у отдельного класса бизнес логики не должно быть зависимости от класса вывода данных.
+					OnAdd?.Invoke(this, new EventsArgsWorks() {Name = bufPerson.Name,Time = time });
                     OnAdd += bufPerson.Greeting;
                     OnDel += bufPerson.Parting;
                     }

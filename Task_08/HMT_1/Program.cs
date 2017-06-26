@@ -13,7 +13,7 @@ namespace HMT_1
          * Если строки состоят из равного числа символов, их следует отсортировать по алфавиту.
          * Реализовать метод сравнения строк отдельным методом, передаваемым в сортировку через делегат.
          */
-        public delegate bool compareDel(string a, string b);
+        public delegate bool compareDel(string a, string b);//todo pn ты не выполнил условие задания. Нужно сделать отдельный метод сравнения, в который входным параметром придет делегат.
         static void Main(string[] args)
         {
             Console.InputEncoding = Encoding.Unicode;
