@@ -25,10 +25,14 @@ namespace HMT_2
             //
             string[] wArray = new string[] { "Джек", "Уолли", "Рон", "Джордж", "Вилли" };
             MyList<Person> workersList = new MyList<Person>();
+            Person bufPerson;
             //
             for (int i = 0; i < wArray.Length; i++)
             {
-                workersList.Add(new Person(wArray[i]), new DateTime(2017, 6, 2, 8 + i * 2, 0, 0, 0));
+                bufPerson = new Person(new Person(wArray[i], new DateTime(2017, 6, 2, 8 + i * 2, 0, 0, 0)));
+                Console.WriteLine();
+                Console.WriteLine("[{0} пришёл в офис (время {1:t})]", bufPerson.Name, bufPerson.TimeCome);
+                workersList.Add(bufPerson);
             }
             for (int i = 0; i < wArray.Length; i++)
             {

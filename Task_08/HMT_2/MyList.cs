@@ -11,16 +11,14 @@ namespace HMT_2
         public delegate void ListEnventHandler(object sender,EventsArgsWorks e);
         public event ListEnventHandler OnAdd;
         public event ListEnventHandler OnDel;
-        public void Add(T item,DateTime time)
+        public new void Add(T item)
         {
             if (item is Person)
             {
                 if (item != null)
                     {
-                    Person bufPerson = ((object)item as Person);
-                    Console.WriteLine();
-                    Console.WriteLine("[{0} пришёл в офис (время {1:t})]", bufPerson.Name, time);//todo pn у отдельного класса бизнес логики не должно быть зависимости от класса вывода данных.
-					OnAdd?.Invoke(this, new EventsArgsWorks() {Name = bufPerson.Name,Time = time });
+                    Person bufPerson = ((object)item as Person);//todo pn у отдельного класса бизнес логики не должно быть зависимости от класса вывода данных.
+					OnAdd?.Invoke(this, new EventsArgsWorks() {Name = bufPerson.Name,Time = bufPerson.TimeCome });
                     OnAdd += bufPerson.Greeting;
                     OnDel += bufPerson.Parting;
                     }

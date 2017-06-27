@@ -35,7 +35,7 @@ namespace HMT_2
                     if (word != "")
                         {
                             sumWords++;
-                            word.ToLower();
+                            word = word.ToLower();
                             bool toBreak = false;
                             for (int i = 0; i < lWords.Count; i++)
                             {

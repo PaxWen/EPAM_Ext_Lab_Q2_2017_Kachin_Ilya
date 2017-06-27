@@ -25,7 +25,7 @@ namespace HMT_1
                 }
                 n = 0;
                 while (lPerson.Count > 1)//todo pn что то у тебя с выводом не то. Там в оставших и выбывших одни и те же люди. В конце должен остаться 1 человек.
-                {
+                {//Сначало показывается оставшиеся люди с прошлого раунда, потом те которые выбывают в текущем (вы оставили)
                     n++;
                     Console.WriteLine("Круг №{0}", n);
                     Console.WriteLine("Оставшиеся люди: ");
@@ -41,6 +41,7 @@ namespace HMT_1
                     }
                     lPerson.RemoveAll((x) => x == null);
                 }
+                Console.WriteLine();
                 Console.WriteLine("Для выхода нажмите \' Enter\'... ");
                 if (Console.ReadKey().Key == ConsoleKey.Enter)
                 {

@@ -10,13 +10,21 @@ namespace HMT_2
     {
         private string name;
         public string Name { get { return name; } }
+        public DateTime TimeCome { get; }
         public Person(string name)
         {
             this.name = name;
+            TimeCome = DateTime.Now;
+        }
+        public Person(string name,DateTime time)
+        {
+            this.name = name;
+            TimeCome = time;
         }
         public Person(Person p)
         {
             this.name = p.name;
+            this.TimeCome = p.TimeCome;
         }
         public void Greeting(object sender, EventsArgsWorks e)
         {
