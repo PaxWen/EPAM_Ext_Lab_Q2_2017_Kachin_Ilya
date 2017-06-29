@@ -68,6 +68,10 @@ namespace HMT_1
                                     {
                                         Employee1.Birthday = DateTime.Parse(buf);
                                         Employee1.Age = DateTime.Now.Year - Employee1.Birthday.Year;
+                                        if (DateTime.Now.Month < Employee1.Birthday.Month ||(DateTime.Now.Month == Employee1.Birthday.Month && DateTime.Now.Day < Employee1.Birthday.Day))
+                                        {
+                                            Employee1.Age--;
+                                        }
                                         break;
                                     }
                                     else

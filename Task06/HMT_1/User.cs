@@ -17,8 +17,13 @@ namespace HMT_1
         {
             Name = N;
             SecondName = SN;
-            Patronymic = P;
-            Age = DateTime.Now.Year-B.Year;//todo pn в половине случаев будет неправильный возраст
+            Patronymic = P;//todo pn в половине случаев будет неправильный возраст
+            Age = DateTime.Now.Year - B.Year;
+            if (DateTime.Now.Month < B.Month ||
+                (DateTime.Now.Month == B.Month && DateTime.Now.Day < B.Day))
+            {
+                Age--;
+            }
         }
         public User()
         {

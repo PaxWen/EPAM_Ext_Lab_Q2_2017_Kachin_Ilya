@@ -118,25 +118,20 @@ namespace HMT_3
         }
         public void AddRange(T[] arrItems)//todo pn упрости метод, очень много лишних условий.
         {
-            if (arr.Length - capacity >= arrItems.Length)
+            if (arr.Length - capacity >= arrItems.Length)//если ячеек достаточно
             {
-                for (int j = capacity; j < arrItems.Length + capacity; j++)
-                {
-                    arr[j] = arrItems[j - capacity];
-                }
+                fillArray(ref arr, arrItems, capacity);
                 capacity += arrItems.Length;
                 return;
             }
-            int multSegments = 1;
+
+            int multSegments = 1;//если не достаточно
             while ((arr.Length * multSegments*2) - capacity <= arrItems.Length)//todo pn а теперь представь, что у тебя 1млн элементов в массиве, а добавить нужно 100. лучше вынести в константу число, на которое ты увеличиваешь массив каждый раз.
 			{
                 multSegments++;
             }
             multArray(multSegments);
-            for (int i = 0; i < arrItems.Length; i++)
-            {
-                arr[i + capacity] = arrItems[i];
-            }
+            fillArray(ref arr, arrItems, capacity);
             capacity += arrItems.Length;
 
         }
@@ -164,14 +159,15 @@ namespace HMT_3
         private void multArray(int multiplier)
         {
             T[] arrbuf = new T[arr.Length];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arrbuf[i] = arr[i];
-            }
+            fillArray(ref arrbuf, arr, 0);
             arr = new T[arr.Length * multiplier*2];//todo pn где-то я такую логику уже видел, а значит, нужно вынести её в отдельный метод
-            for (int i = 0; i < arrbuf.Length; i++)
+            fillArray(ref arr, arrbuf,0);
+        }
+        private void fillArray(ref T[] arr,T[] bufArray,int index)//заполение массива 2 массивом начиная с index
+        {
+            for (int i = 0; i < bufArray.Length; i++)
             {
-                arr[i] = arrbuf[i];
+                arr[i+index] = bufArray[i];
             }
         }
         public void Reset()

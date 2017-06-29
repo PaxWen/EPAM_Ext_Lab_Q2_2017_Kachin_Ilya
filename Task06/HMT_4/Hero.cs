@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,24 +9,24 @@ namespace HMT_4
 {
     public class Hero:Unit
     {
-        public Hero(int x, int y, char gist, string type, int HP):base(x, y, gist, type, HP)
+        public Hero(int x, int y, char gist, TypeObect type,int atk, int HP):base(x, y, gist, type,atk, HP)
         {
         }
-        public override void moveOrInteraction(int biasX, int biasY, string type)
+        public override void moveOrInteraction(int biasX, int biasY, TypeObect type,int damage = 0)
         {
            switch (type)//todo pn type должен быть enum в этом случае
             {
-                case "Space":
+                case TypeObect.Space:
                     {
                         Core.SetPosition(Core.X + biasX, Core.Y + biasY);
                         break;
                     }
-                case "Enemy":
+                case TypeObect.Enemy:
                     {
                         Live = false;
                         break;
                     }
-                case "Bonus":
+                case TypeObect.Bonus:
                     {
                         Core.SetPosition(Core.X + biasX, Core.Y + biasY);
                         HP++;

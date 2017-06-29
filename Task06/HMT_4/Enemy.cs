@@ -8,9 +8,9 @@ namespace HMT_4
 {
     public class Enemy : Unit
     {
-        public override void moveOrInteraction(int biasX, int biasY, string type)
+        public override void moveOrInteraction(int biasX, int biasY, TypeObect type,int damage=0)
         {
-            if (type == "Space")
+            if (type == TypeObect.Space)
             {
                 Core.SetPosition(Core.X+biasX,Core.Y+biasY);
             }else
@@ -18,7 +18,7 @@ namespace HMT_4
                 MoveLogic++;
             }
         }
-        public Enemy(int x, int y, char gist, string type, int HP):base(x, y, gist, type, HP)
+        public Enemy(int x, int y, char gist, TypeObect type,int atk, int HP):base(x, y, gist, type,atk, HP)
         {
         }
     }

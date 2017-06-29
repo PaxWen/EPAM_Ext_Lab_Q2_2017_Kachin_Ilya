@@ -32,21 +32,30 @@ namespace HMT_4
                                           "############".ToCharArray()
                                          };
             List<Enemy> Enemys = new List<Enemy>();
-            Hero Hero1;
+            Hero Hero1=null;
             for (int i = 0; i < Area.Length; i++)
             {
                 for (int j = 0; j < Area[i].Length; j++)
                 {
                     if (Area[i][j] == 'h')
                     {
-                        Hero1 = new Hero(i,j,Area[i][j],"Hero",15);//todo pn чот не уловил логики создавать Area.Length раз героя в памяти
+                        if (Hero1 == null)
+                        {
+                            Hero1 = new Hero(i, j, Area[i][j], TypeObect.Hero, 5,15);//todo pn чот не уловил логики создавать Area.Length раз героя в памяти
+                        }
+                        else
+                        {
+                            Area[i][j] = 'e';
+
+                        }                  
 					}
-                    if (Area[i][j] == 'h')
+                    if (Area[i][j] == 'e')
                     {
-                        Enemys.Add(new Enemy(i, j, Area[i][j], "Enemy", 15));
+                        Enemys.Add(new Enemy(i, j, Area[i][j], TypeObect.Enemy, 1,15));
                     }
                 }
             }
+
         }
     }
 }
