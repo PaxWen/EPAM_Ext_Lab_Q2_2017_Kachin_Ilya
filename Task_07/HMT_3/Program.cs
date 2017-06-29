@@ -24,6 +24,7 @@ namespace HMT_3
             DAint.Insert(25, 4);
             onConsoleArray(DAint);
             DAint.AddRange(new int[] { 2, 5, 6 });
+            DAint.AddRange(new int[] { 2, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6 });
             onConsoleArray(DAint);
             Console.ReadKey();
         }

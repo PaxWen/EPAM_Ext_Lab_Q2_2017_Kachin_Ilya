@@ -79,7 +79,7 @@ namespace HMT_3
                 return;
             }
             int buf = arr.Length;
-            multArray(1);
+            addSegments(ref arr,arr.Length);
             capacity++;
             arr[buf] = item;
         }
@@ -124,13 +124,7 @@ namespace HMT_3
                 capacity += arrItems.Length;
                 return;
             }
-
-            int multSegments = 1;//если не достаточно
-            while ((arr.Length * multSegments*2) - capacity <= arrItems.Length)//todo pn а теперь представь, что у тебя 1млн элементов в массиве, а добавить нужно 100. лучше вынести в константу число, на которое ты увеличиваешь массив каждый раз.
-			{
-                multSegments++;
-            }
-            multArray(multSegments);
+            addSegments(ref arr,arrItems.Length-(arr.Length-capacity));
             fillArray(ref arr, arrItems, capacity);
             capacity += arrItems.Length;
 
@@ -155,7 +149,13 @@ namespace HMT_3
             arr[arr.Length - 1] = default(T);
             return exitBool;
         }
-
+        private void addSegments(ref T[] arr,int segments)
+        {
+            T[] arrbuf = new T[arr.Length];
+            fillArray(ref arrbuf, arr, 0);
+            arr = new T[arr.Length + segments];
+            fillArray(ref arr, arrbuf, 0);
+        }
         private void multArray(int multiplier)
         {
             T[] arrbuf = new T[arr.Length];
