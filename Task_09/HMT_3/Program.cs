@@ -82,7 +82,7 @@ namespace HMT_3
         }
         public static void SecondMetod(int[] arr)
         {
-            SearchPositive searchPos = PositiveInArray;
+            SearchPositive searchPos = PositiveInArray; //todo pn мы условие поиска передаем через делегат, а не весь метод поиска.
             OutArrayOnConsole(searchPos(arr), 2);
         }
         public static void ThirdMetod(int[] arr)
@@ -90,8 +90,8 @@ namespace HMT_3
             SearchPositive searchPos;
             searchPos = delegate (int[] array)
             {
-                List<int> arrList = new List<int>();
-                foreach (var item in arr)
+                List<int> arrList = new List<int>();//todo pn мог бы и не копипастить PositiveInArray
+				foreach (var item in arr)
                 {
                     if (item > 0)
                     {
