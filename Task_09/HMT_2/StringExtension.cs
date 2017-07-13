@@ -12,7 +12,7 @@ namespace HMT_2
         {
             foreach (var item in word)
             {
-                if (!char.IsDigit(item))//todo pn некорректно. А если 0 введут?
+                if (!char.IsDigit(item)&&(item != '0'))//todo pn некорректно. А если 0 введут?
                 {
                     return false;
                 }

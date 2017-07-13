@@ -17,7 +17,7 @@ namespace HMT_3
          *   5. LINQ-выражения
          *   Сравнить скорость выполнения вычислений. 
          */
-        public delegate int[] SearchPositive(int[] arr);
+        public delegate bool SearchObject(int a,int b);
         static void Main(string[] args)
         {
             Console.InputEncoding = Encoding.Unicode;
@@ -26,7 +26,7 @@ namespace HMT_3
             int[] arr = new int[N];
             Random rnd = new Random();
             Stopwatch time = new Stopwatch();
-            SearchPositive searchPos = PositiveInArray;
+            SearchObject searchCondition = MoreNumber;
             while (true)
             {
                 Console.Clear();
@@ -46,19 +46,19 @@ namespace HMT_3
                 //2
                 time.Reset();
                 time.Start();
-                SecondMetod(arr);
+                SecondMetod(arr,MoreNumber);
                 time.Stop();
                 Console.WriteLine("Время метода: {0}", time.ElapsedTicks);
                 //3
                 time.Reset();
                 time.Start();
-                ThirdMetod(arr);
+                ThirdMetod(arr,delegate(int a,int b) { return a > b; });
                 time.Stop();
                 Console.WriteLine("Время метода: {0}", time.ElapsedTicks);
                 //4
                 time.Reset();
                 time.Start();
-                FourthMetod(arr);
+                FourthMetod(arr,(int a,int b) => a>b );
                 time.Stop();
                 Console.WriteLine("Время метода: {0}", time.ElapsedTicks);
                 //5
@@ -80,43 +80,42 @@ namespace HMT_3
         {
             OutArrayOnConsole(PositiveInArray(arr), 1);
         }
-        public static void SecondMetod(int[] arr)
+        public static void SecondMetod(int[] arr,SearchObject condition)
         {
-            SearchPositive searchPos = PositiveInArray; //todo pn мы условие поиска передаем через делегат, а не весь метод поиска.
-            OutArrayOnConsole(searchPos(arr), 2);
-        }
-        public static void ThirdMetod(int[] arr)
-        {
-            SearchPositive searchPos;
-            searchPos = delegate (int[] array)
+            List<int> arrList = new List<int>();
+            foreach (var item in arr)
             {
-                List<int> arrList = new List<int>();//todo pn мог бы и не копипастить PositiveInArray
-				foreach (var item in arr)
+                if (condition(item,0))
                 {
-                    if (item > 0)
-                    {
-                        arrList.Add(item);
-                    }
+                    arrList.Add(item);
                 }
-                return arrList.ToArray();
-            };
-            OutArrayOnConsole(searchPos(arr), 3);
+            }
+            //SearchPositive searchPos = PositiveInArray; //todo pn мы условие поиска передаем через делегат, а не весь метод поиска.
+            OutArrayOnConsole(arrList.ToArray(), 2);
         }
-        public static void FourthMetod(int[] arr)
+        public static void ThirdMetod(int[] arr,SearchObject condition)
         {
-            SearchPositive posArray = (x) => 
-                    {
-                        List<int> arrList = new List<int>();
-                        foreach (var item in arr)
-                        {
-                            if (item > 0)
-                            {
-                                arrList.Add(item);
-                            }
-                        }
-                        return arrList.ToArray();
-                    };
-            OutArrayOnConsole(posArray(arr), 4);
+            List<int> arrList = new List<int>();
+            foreach (var item in arr)
+            {
+                if (condition(item, 0))
+                {
+                    arrList.Add(item);
+                }
+            }
+            OutArrayOnConsole(arrList.ToArray(), 3);
+        }
+        public static void FourthMetod(int[] arr, SearchObject condition)
+        {
+            List<int> arrList = new List<int>();
+            foreach (var item in arr)
+            {
+                if (condition(item, 0))
+                {
+                    arrList.Add(item);
+                }
+            }
+            OutArrayOnConsole(arrList.ToArray(), 4);
         }
         public static void FifthMetod(int[] arr)
         {
@@ -158,6 +157,10 @@ namespace HMT_3
                 }
             }
             return arrList.ToArray();
+        }
+        public static bool MoreNumber(int a,int b)
+        {
+            return a > b;
         }
     }
 }
