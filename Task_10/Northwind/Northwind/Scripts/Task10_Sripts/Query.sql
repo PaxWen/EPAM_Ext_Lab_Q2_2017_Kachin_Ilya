@@ -195,22 +195,24 @@ Order by Amount DESC
  Т.е. в резульирующем наборе должны присутствовать дополнительно к информации о продажах продавца 
  для каждого покупателя следующие строчки:
 */
-Select 
-	Distinct Orders.EmployeeID as 'EmployeeID'
-,	(Select Employees.FirstName
-	From Northwind.Northwind.Employees
-	Where Orders.EmployeeID = Employees.EmployeeID ) as 'Seller'
-, Orders.CustomerID as 'CustID'
-,	(Select ContactName
-	From Northwind.Northwind.Customers
-	Where Orders.CustomerID = Customers.CustomerID) as 'Customer'
+Select Case When Orders.EmployeeID is Null then 'ALL' else 
+		(Select Employees.FirstName
+		From Northwind.Northwind.Employees
+		Where Orders.EmployeeID = Employees.EmployeeID )
+	end as 'Seller'
+,	Case When Orders.CustomerID is Null then 'ALL' else 
+		(Select ContactName
+		From Northwind.Northwind.Customers
+		Where Orders.CustomerID = Customers.CustomerID) 
+	end as 'Customer'
 ,Count(Orders.EmployeeID) as 'Amount'
 From Northwind.Northwind.Orders--, Northwind.Northwind.Employees
 Where YEAR(ShippedDate) = 1998
 Group by ROLLUP (Orders.EmployeeID,Orders.CustomerID)
 Order by Seller, Customer, Amount
 
-/* 6.4 
+/* 6.4
+
 Найти покупателей и продавцов, которые живут в одном городе. 
 Если в городе живут только один или несколько продавцов или только один или 
 несколько покупателей, то информация о таких покупателя и продавцах не должна 
@@ -219,21 +221,52 @@ Order by Seller, Customer, Amount
 ‘Person’, ‘Type’ (здесь надо выводить строку ‘Customer’ или ‘Seller’ в завимости от типа записи), 
 ‘City’. Отсортировать результаты запроса по колонке ‘City’ и по ‘Person’.
 */
-Select Distinct Orders.EmployeeID as 'EmpID'
-,Orders.CustomerID as 'CusID'
-,(Case When Orders.EmployeeID is NULL Then 'Customer' 
-	   When Orders.CustomerID is NULL Then 'Seller' 
-	   end) as 'Type'
-From Northwind.Northwind.Orders
-Where (
-	Select City
-	From Northwind.Northwind.Customers
-	Where Customers.CustomerID = Orders.CustomerID
-) in (
-	Select City
-	From Northwind.Northwind.Employees
-	Where Employees.EmployeeID = Orders.EmployeeID
-)
+SELECT Customers.ContactName AS Person, 'Customer' AS Type,Customers.City AS City
+FROM Northwind.Northwind.Customers
+WHERE EXISTS (
+              SELECT Employees.City 
+              FROM Northwind.Northwind.Employees
+              WHERE Employees.City=Customers.City
+              )
+UNION ALL
+SELECT FirstName+' '+LastName AS Person, 'Seller' AS Type,City AS City
+FROM Northwind.Northwind.Employees 
+WHERE EXISTS (
+              SELECT City 
+              FROM Northwind.Northwind.Customers 
+              WHERE Employees.City=Customers.City
+              )
+Order by City,Person
+
+/* 6.5
+Найти всех покупателей, которые живут в одном городе. 
+В запросе использовать соединение таблицы Customers c собой - самосоединение. 
+Высветить колонки CustomerID и City. Запрос не должен высвечивать дублируемые записи.
+ Для проверки написать запрос, который высвечивает города, которые встречаются более одного раза в таблице Customers. 
+ Это позволит проверить правильность запроса.
+*/
+Select Distinct cus1.CustomerID, cus2.City
+From Northwind.Northwind.Customers cus1 join Northwind.Northwind.Customers cus2
+	on cus1.CustomerID != cus2.CustomerID
+where (cus1.City = cus2.City) and (cus1.CustomerID <> cus2.CustomerID)
+Order by cus2.City,cus1.CustomerID
+
+Select COUNT(*) as 'citizens', City
+From Northwind.Northwind.Customers
+Group by City
+Having COUNT(*) > 1
+
+
+
+/* 6.6 
+По таблице Employees найти для каждого продавца его руководителя, т.е. кому он делает репорты. 
+Высветить колонки с именами 'User Name' (LastName) и 'Boss'. В колонках должны быть
+высвечены имена из колонки LastName. Высвечены ли все продавцы в этом запросе?
+-- Нет. т.к. у Fuller отстутвует руководитель он будет отсутвовать и в таблице
+*/
+Select emp2.LastName as 'User Name',emp1.LastName as 'Boss'
+From Northwind.Northwind.Employees emp1 join Northwind.Northwind.Employees emp2
+	on emp1.EmployeeID = emp2.ReportsTo
 
 
 /*7.1 
@@ -304,7 +337,7 @@ Select ContactName, CustomerID
  From Northwind.Northwind.Employees
  Order by Letters
 
-/* 13.1 
+/* 13.1 !=
 Написать процедуру, которая возвращает самый крупный заказ для каждого из продавцов за определенный год. 
 В результатах не может быть несколько заказов одного продавца, должен быть только один и самый крупный. 
 В результатах запроса должны быть выведены следующие колонки: колонка с именем и фамилией продавца 
@@ -322,6 +355,46 @@ SELECT и БЕЗ ИСПОЛЬЗОВАНИЯ КУРСОРОВ. Название �
 что описано в требованиях по нему. ВСЕ ЗАПРОСЫ ПО ВЫЗОВУ ПРОЦЕДУР ДОЛЖНЫ БЫТЬ НАПИСАНЫ В ФАЙЛЕ Query.sql
  – см. пояснение ниже в разделе «Требования к оформлению».
 */
+	EXECUTE dbo.GreatestOrders @n = 1998; 
+	/* 13.2 !=
+	Написать процедуру, которая возвращает заказы в таблице Orders, 
+	согласно указанному сроку доставки в днях (разница между OrderDate и ShippedDate). 
+	В результатах должны быть возвращены заказы, срок которых превышает переданное значение
+	 или еще недоставленные заказы. Значению по умолчанию для передаваемого срока 35 дней. 
+	 Название процедуры ShippedOrdersDiff. Процедура должна высвечивать следующие 
+	 колонки: OrderID, OrderDate, ShippedDate, ShippedDelay (разность в днях между ShippedDate и OrderDate), 
+	 SpecifiedDelay (переданное в процедуру значение). Необходимо продемонстрировать использование этой процедуры.
+	*/
+
+	EXECUTE dbo.ShippedOrdersDiff 35
+
+	/* 13.3 !=
+	Написать процедуру, которая высвечивает всех подчиненных заданного продавца, 
+	как непосредственных, так и подчиненных его подчиненных. В качестве входного параметра 
+	функции используется EmployeeID. Необходимо распечатать имена подчиненных и выровнять их в тексте 
+	(использовать оператор PRINT) согласно иерархии подчинения. 
+	Продавец, для которого надо найти подчиненных также должен быть высвечен. 
+	Название процедуры SubordinationInfo. В качестве алгоритма для решения этой задачи 
+	надо использовать пример, приведенный в Books Online и рекомендованный Microsoft для 
+	решения подобного типа задач. Продемонстрировать использование процедуры.
+	*/
+	Select  distinct emp1.EmployeeID  as 'nas'
+		,emp2.EmployeeID 'pod'
+	From (Northwind.Northwind.Employees emp1 join Northwind.Northwind.Employees emp2 on 1=1)
+		where emp1.EmployeeID = (
+			Select emp2.EmployeeID
+			From tables1
+		)
+	Order by emp1.EmployeeID 
+		 
+
+	/* 13.4 !=
+	Написать функцию, которая определяет, есть ли у продавца подчиненные. В
+	озвращает тип данных BIT. В качестве входного параметра функции используется EmployeeID. 
+	Название функции IsBoss. Продемонстрировать использование функции для всех продавцов из таблицы Employees.
+	*/
 
 
-
+	Select EmployeeID
+	,dbo.IsBoss(Convert (int,EmployeeID))
+	From Northwind.Northwind.Employees 
