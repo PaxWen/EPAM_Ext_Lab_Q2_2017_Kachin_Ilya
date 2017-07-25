@@ -1,11 +1,11 @@
-﻿ 
-GO
-CREATE PROCEDURE [dbo].[GreatestOrders]
+﻿ALTER PROCEDURE [dbo].[GreatestOrders]
+(
 @n int
+)
 AS
 Begin
 	SELECT FirstName
-	,LastName
+	,LastName	
 	,MAX(Sum1) as 'MAX Order'
 	FROM (
 		Select Employees.EmployeeID as 'EmpID'
@@ -16,9 +16,9 @@ Begin
 		from (Northwind.Northwind.Employees join Northwind.Northwind.Orders 
 			on Employees.EmployeeID = Orders.EmployeeID) join  Northwind.Northwind.[Order Details]
 			on Orders.OrderID = [Order Details].OrderID
-		Where Year(Orders.OrderDate) = n
+		Where Year(Orders.OrderDate) = @n
 		Group by Employees.EmployeeID,FirstName,LastName,[Order Details].OrderID
 		) as Table2
 	Group by FirstName,LastName
+	Order by [MAX Order] desc
 End
-GO

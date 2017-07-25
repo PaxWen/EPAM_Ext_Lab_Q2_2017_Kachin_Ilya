@@ -355,7 +355,10 @@ SELECT и БЕЗ ИСПОЛЬЗОВАНИЯ КУРСОРОВ. Название �
 что описано в требованиях по нему. ВСЕ ЗАПРОСЫ ПО ВЫЗОВУ ПРОЦЕДУР ДОЛЖНЫ БЫТЬ НАПИСАНЫ В ФАЙЛЕ Query.sql
  – см. пояснение ниже в разделе «Требования к оформлению».
 */
-	EXECUTE dbo.GreatestOrders @n = 1998; 
+	Select 2
+	from dbo.GreatestOrders 
+	Where n = 1998; 
+
 	/* 13.2 !=
 	Написать процедуру, которая возвращает заказы в таблице Orders, 
 	согласно указанному сроку доставки в днях (разница между OrderDate и ShippedDate). 
@@ -380,10 +383,11 @@ SELECT и БЕЗ ИСПОЛЬЗОВАНИЯ КУРСОРОВ. Название �
 	*/
 	Select  distinct emp1.EmployeeID  as 'nas'
 		,emp2.EmployeeID 'pod'
-	From (Northwind.Northwind.Employees emp1 join Northwind.Northwind.Employees emp2 on 1=1)
-		where emp1.EmployeeID = (
+	From Northwind.Northwind.Employees emp1, Northwind.Northwind.Employees emp2  -- сделано для получения всех вариантов
+		where emp2.EmployeeID in (
 			Select emp2.EmployeeID
-			From tables1
+			From Northwind.Northwind.Employees emp3
+			Where (emp1.EmployeeID = emp3.ReportsTo) or ((emp2.ReportsTo = emp1.EmployeeID) and (emp2.EmployeeID = emp3.ReportsTo))
 		)
 	Order by emp1.EmployeeID 
 		 
@@ -396,5 +400,9 @@ SELECT и БЕЗ ИСПОЛЬЗОВАНИЯ КУРСОРОВ. Название �
 
 
 	Select EmployeeID
-	,dbo.IsBoss(Convert (int,EmployeeID))
 	From Northwind.Northwind.Employees 
+	Where dbo.IsBoss(EmployeeID)>2
+
+	Select Count(Employees.EmployeeID)
+	From Northwind.Northwind.Employees
+	Where Employees.ReportsTo = 5
