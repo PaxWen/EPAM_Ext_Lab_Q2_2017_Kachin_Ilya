@@ -9,12 +9,12 @@ namespace HMT_1
     public class CustOrdersDetails
     {
         public string ProductName { get; private set; }
-        public int Quantity { get; private set; }
+        public short Quantity { get; private set; }
         public double UnityPrice { get; private set; }
         public double Discont { get; private set; }
         public double ExtendenPrice { get; private set; }
 
-        public CustOrdersDetails(string productName, double price,int quality ,double discont,double extendedPrice)
+        public CustOrdersDetails(string productName, double price,short quality ,double discont,double extendedPrice)
         {
             this.ProductName = productName;
             this.Quantity = quality;

@@ -10,20 +10,20 @@ namespace HMT_1
 {
 
     /* Реализуйте возможность через DAL управлять заказами:
-    1. Показывать список введенных заказов (таблица [Orders]). // GetOrders()
+    1. Показывать список введенных заказов (таблица [Orders]). // GetOrders()+
     Помимо основных полей должны возвращаться:
         a. Статус заказа в виде Enum поля.
     2. Показывать подробные сведения о конкретном заказе, включая номенклатуру заказа 
     (таблицы [Orders], [Order Details], и [Products], требуется извлекать как Id, 
-    так и название продукта) // GetDetailedOrder()
-    3. Создавать новые заказы.// InsertToTable()
+    так и название продукта) // GetDetailedOrder()+
+    3. Создавать новые заказы.// InsertOrder()+
     4. Менять статус заказа. Для реализации этого пункта предлагается 
     сделать специальные методы (именование выбирайте сами):
-        a. Передать в работу: устанавливает дату заказа // SetOrderDate()
-        b. Пометить как выполненный: устанавливает ShippedDate //SetShipedDate();
+        a. Передать в работу: устанавливает дату заказа // SetOrderDate()+
+        b. Пометить как выполненный: устанавливает ShippedDate //SetShipedDate();+
     5. Получать статистику по заказам, используя готовые хранимые процедуры:
-        a. CustOrderHist //GetCustOrderHist()
-        b. CustOrdersDetail. //GetCustOrdersDetail()
+        a. CustOrderHist //GetCustOrderHist()+
+        b. CustOrdersDetail. //GetCustOrdersDetail()+
      */
     public enum StatusOrders {Sent, Delivered } 
     public class DAL
@@ -34,19 +34,32 @@ namespace HMT_1
             string listOrders = "";
             for (int i = 0; i < ordersID.Length; i++)
             {
-                listOrders += ordersID[i].ToString() + (i == ordersID.Length ? "" : ",");
+                listOrders += ordersID[i].ToString() + (i != (ordersID.Length - 1) ? ", " : "");
             }
-            string commandString = string.Format(@"Select OrderID,CustomerID,EmployeeID,OrderDate,ShippedDate,ShipAddress from Northwind.Northwind.Orders Where OrderID in ({2})", listOrders);
-
-            DataSet data = new DataSet();
-            data = SelectManualInput(connectionString, connectionString);
-            for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+            string commandString = string.Format(@"Select OrderID,CustomerID,EmployeeID,OrderDate,ShippedDate,ShipAddress From Northwind.Northwind.Orders Where OrderID in ({0})", listOrders.ToString());
+            using (var connection = new SqlConnection(connectionString))
             {
-                orders.Add(new Order((int)data.Tables[0].Rows[i].ItemArray[0],(string) data.Tables[0].Rows[i].ItemArray[1], (int)data.Tables[0].Rows[i].ItemArray[2],(DateTime) data.Tables[0].Rows[i].ItemArray[3], (DateTime)data.Tables[0].Rows[i].ItemArray[4],(string) data.Tables[0].Rows[i].ItemArray[5]));              
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = commandString;
+                command.CommandType = CommandType.Text;
+
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    orders.Add(new Order(
+                          reader.GetInt32(0) //OrderID
+                        , reader.GetString(1)//CustomerID
+                        , reader.GetInt32(2)//EmployeeID
+                        , reader.GetDateTime(3)//OrderDate
+                        , reader.GetDateTime(4)//ShippedDate
+                        , reader.GetString(5)//Address
+                       ));
+                }
+                return orders;
             }
-            return orders;
         }
-        public CustOrderHist GetCustOrderHist(string connectionString,int CustomerID)
+        public CustOrderHist GetCustOrderHist(string connectionString,string CustomerID)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -64,31 +77,15 @@ namespace HMT_1
                 param.Direction = ParameterDirection.Input;
                 command.Parameters.Add(param);
 
-                param = new SqlParameter();
-                param.ParameterName = "@ProductName";
-                param.SqlDbType = SqlDbType.NVarChar;
-                param.Size = 40;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Total";
-                param.SqlDbType = SqlDbType.Int;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-                command.ExecuteNonQuery();
-                DataSet data = new DataSet();
-                data.Tables[0].Rows.Add(command.Parameters);
-                connection.Close();
+                var reader = command.ExecuteReader();
                 CustOrderHist customer = new CustOrderHist(CustomerID);
-                for (int i = 0; i < data.Tables[0].Rows.Count; i++)
-                {
+                while (reader.Read()) {
                     customer.AddProductTotal(
-                         (string)data.Tables[0].Rows[i].ItemArray[0] // productName
-                        , (int) data.Tables[0].Rows[i].ItemArray[1] // Total
+                         reader.GetString(0) // productName
+                        , reader.GetInt32(1) // Total
                         );
                 }
+                connection.Close();
                 return customer;
             }
         }
@@ -100,63 +97,30 @@ namespace HMT_1
                 connection.Open();
                 var command = connection.CreateCommand();
 
-                command.CommandText = @"Northwind.CustOrdersOrders";
+                command.CommandText = @"Northwind.CustOrdersDetail";
                 command.CommandType = CommandType.StoredProcedure;
 
                 SqlParameter param = new SqlParameter();
                 param.ParameterName = "@OrderID";
                 param.SqlDbType = SqlDbType.Int;
-                param.Value = OrderID.ToString().ToCharArray();
+                param.Value = OrderID;
 
                 param.Direction = ParameterDirection.Input;
                 command.Parameters.Add(param);
 
-                param = new SqlParameter();
-                param.ParameterName = "@ProductName";
-                param.SqlDbType = SqlDbType.NVarChar;
-                param.Size = 40;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-
-                param = new SqlParameter();
-                param.ParameterName = "@UnitPrice";
-                param.SqlDbType = SqlDbType.Int;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Quantity";
-                param.SqlDbType = SqlDbType.SmallInt;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Discount";
-                param.SqlDbType = SqlDbType.Int;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@ExtendedPrice";
-                param.SqlDbType = SqlDbType.Int;
-                param.Direction = ParameterDirection.Output;
-                command.Parameters.Add(param);
-
-                command.ExecuteNonQuery();
-                DataSet data = new DataSet();
-                data.Tables[0].Rows.Add(command.Parameters);
-                connection.Close();
+                var reader = command.ExecuteReader();
 
                 List<CustOrdersDetails> orderDetails = new List<CustOrdersDetails>();
-                for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+                while (reader.Read())
                 {
+                    object[] buf = new object[reader.FieldCount];
+                    reader.GetValues(buf);
                     orderDetails.Add(new CustOrdersDetails(
-                         (string)data.Tables[0].Rows[i].ItemArray[0] // productName
-                        , (double)data.Tables[0].Rows[i].ItemArray[1] // Price
-                        , (int)data.Tables[0].Rows[i].ItemArray[2] // Quality
-                        , (double)data.Tables[0].Rows[i].ItemArray[3] // Discont
-                        , (double)data.Tables[0].Rows[i].ItemArray[4] // ExtendenPrice
+                         reader.GetString(0) // productName
+                        , Convert.ToDouble(reader.GetDecimal(1)) // Price
+                        , reader.GetInt16(2) // Quality
+                        , reader.GetInt32(3) // Discont
+                        , Convert.ToDouble(reader.GetDecimal(4)) // ExtendenPrice
                         ));
                 }
                 return orderDetails;
@@ -164,7 +128,7 @@ namespace HMT_1
         }
         public void SetOrderDate(string connectionString, int ordersID,string date)
         {
-            UpdateTable(connectionString, "Northwind.Northwind.Orders", new string[] { "OrderDate" }, new string[] { date.ToString() }, string.Format("OrderID={0}", ordersID));
+            UpdateTable(connectionString, "Northwind.Northwind.Orders", new string[] { "OrderDate" }, new string[] { date.ToString() }, string.Format("(OrderID = {0})", ordersID));
             SetShipedDate(connectionString, ordersID, "Null");
         }
         public void SetShipedDate(string connectionString, int ordersID, string date)
@@ -173,72 +137,34 @@ namespace HMT_1
         }
         public List<OrderDetails> GetDetailedOrder(string connectionString, int ordersID)
         {
-            string commandString = string.Format(@"Select Orders.OrderID, Orders.CustomerID, Orders.EmployeeID,Orders.OrderDate,Orders.ShippedDate,Orders.ShipAddress, [Order Details].ProductID, Products.ProductName,[Order Details].Quantity, [Order Details].UnitPrice, [Order Details].Discount from (Northwind.Northwind.Orders join Northwind.Northwind.[Order Details] on Orders.OrderID = [Order Details].OrderID) join Northwind.Northwind.Products on [Order Details].ProductID = Products.ProductID Where OrderID in ({2})", StatusOrders.Sent, StatusOrders.Delivered,ordersID.ToString());
+            string commandString = string.Format(@"Select Orders.OrderID, Orders.CustomerID, Orders.EmployeeID,Orders.OrderDate,Orders.ShippedDate,Orders.ShipAddress, [Order Details].ProductID, Products.ProductName,[Order Details].Quantity,CONVERT(float, [Order Details].UnitPrice), Convert (float,[Order Details].Discount) from (Northwind.Northwind.Orders join Northwind.Northwind.[Order Details] on Orders.OrderID = [Order Details].OrderID) join Northwind.Northwind.Products on [Order Details].ProductID = Products.ProductID Where Orders.OrderID = {2}", StatusOrders.Sent, StatusOrders.Delivered,ordersID.ToString());
             List<OrderDetails> orders = new List<OrderDetails>();
-            DataSet data = new DataSet();
-            data = SelectManualInput(connectionString, connectionString);
-            for (int i = 0; i < data.Tables[0].Rows.Count; i++)
-            {
-                orders.Add(new OrderDetails(
-                    (int)data.Tables[0].Rows[i].ItemArray[0] //OrderID
-                    , (string)data.Tables[0].Rows[i].ItemArray[1]//CustomerID
-                    , (int)data.Tables[0].Rows[i].ItemArray[2]//EmployeeID
-                    , (DateTime)data.Tables[0].Rows[i].ItemArray[3]//OrderDate
-                    , (DateTime)data.Tables[0].Rows[i].ItemArray[4]//ShippedDate
-                    , (string)data.Tables[0].Rows[i].ItemArray[5]//Address
-                    , (int)data.Tables[0].Rows[i].ItemArray[6]//ProductID
-                    , (string)data.Tables[0].Rows[i].ItemArray[7]//ProductName
-                    , (int)data.Tables[0].Rows[i].ItemArray[8]//Quality
-                    , (double)data.Tables[0].Rows[i].ItemArray[9]//Price
-                    , (double)data.Tables[0].Rows[i].ItemArray[10]//Discont
-                    ));
-            }
-            return orders;
-        }
-
-        public DataSet SelectFullTable(string connectionString, string tableName)
-        {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-
-                command.CommandText = @"Select * from " + tableName;
-                command.CommandType = CommandType.Text;
-
-                var reader = command.ExecuteReader();
-                String[] columnNames = new string[reader.FieldCount];
-                for (int i = 0; i < columnNames.Length; i++)
-                {
-                    columnNames[i] = reader.GetName(i);
-                }
-                DataSet data = new DataSet();
-                data.Load(reader, LoadOption.Upsert, columnNames);
-                connection.Close();
-                return data;
-            }
-        }
-        public DataSet SelectManualInput(string connectionString, string commandString)
-        {
-            using (var connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-
                 command.CommandText = commandString;
                 command.CommandType = CommandType.Text;
 
                 var reader = command.ExecuteReader();
-                String[] columnNames = new string[reader.FieldCount];
-                for (int i = 0; i < columnNames.Length; i++)
+                while (reader.Read())
                 {
-                    columnNames[i] = reader.GetName(i);
+                    orders.Add(new OrderDetails(
+                          reader.GetInt32(0) //OrderID
+                        , reader.GetString(1)//CustomerID
+                        , reader.GetInt32(2)//EmployeeID
+                        , reader.GetDateTime(3)//OrderDate
+                        , reader.GetDateTime(4)//ShippedDate
+                        , reader.GetString(5)//Address
+                        , reader.GetInt32(6)//ProductID
+                        , reader.GetString(7)//ProductName
+                        , reader.GetInt16(8)//Quality
+                        , reader.GetDouble(9)//Price
+                        , reader.GetDouble(10)//Discont
+                        ));
                 }
-                DataSet data = new DataSet();
-                data.Load(reader, LoadOption.Upsert, columnNames);
-                connection.Close();
-                return data;
             }
+            return orders;
         }
 
         public int GetCount(string connectionString, string tableName, string columnName = "*", string condition = "")
@@ -258,35 +184,22 @@ namespace HMT_1
         }
 
 
-        public void InsertToTable(string connectionString, string tableName,Type[] typeColumns,string[] nameColumns, string[] valueColumns)
+        public void InsertOrder(string connectionString, Order order)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
 
-                string ValueCollumn = "(";
-                string CollumnName = "(";
-                for (int i = 1; i < valueColumns.Length; i++)
-                {
-                    CollumnName += nameColumns[i];
-                    ValueCollumn += '@' + nameColumns[i];
-                    if (i != nameColumns.Length - 1)
-                    {
-                        ValueCollumn += ", ";
-                        CollumnName += ", ";
-                    }
-                }
-                ValueCollumn += ")";
-                CollumnName += ")";
-                string commandString = string.Format("Insert Into [{0}] {1} Values{2}", tableName, CollumnName, ValueCollumn);
+                string commandString = " SET IDENTITY_INSERT Northwind.Northwind.Orders ON Insert Into Northwind.Northwind.Orders (OrderID, CustomerID,EmployeeID,OrderDate,ShippedDate,ShipAddress) Values(@OrderID, @CustomerID,@EmployeeID,@OrderDate,@ShippedDate,@ShipAddress) SET IDENTITY_INSERT Northwind.Northwind.Orders OFF";
                 command.CommandText = commandString;
                 command.CommandType = CommandType.Text;
-
-                for (int i = 0; i < typeColumns.Length; i++)
-                {
-                    command.Parameters.AddWithValue(nameColumns[i], Convert.ChangeType(valueColumns[i], typeColumns[i]));
-                }
+                command.Parameters.AddWithValue("@OrderID",order.OrderID);
+                command.Parameters.AddWithValue("@CustomerID", order.CustomerID);
+                command.Parameters.AddWithValue("@EmployeeID", order.EmployeeID);
+                command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
+                command.Parameters.AddWithValue("@ShippedDate", order.ShippedDate);
+                command.Parameters.AddWithValue("@ShipAddress", order.Adress);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -306,7 +219,9 @@ namespace HMT_1
                 }
                 conditions = columnsName.Length <= 1 ? "" : ")";
                 string commandString = string.Format(@"Delete From {0} Where {1}",tableName,conditions);
-               
+
+                command.CommandText = commandString;
+                command.CommandType = CommandType.Text;
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -318,14 +233,17 @@ namespace HMT_1
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                string updateString = columnsName.Length <= 1 ? "" : "(";
+                string updateString = "";
+                //updateString = columnsName.Length <= 1 ? "" : "(";
                 for (int i = 0; i < columnsName.Length; i++)
                 {
-                    updateString += string.Format(@"({0}={1}) {2}", columnsName[i], columnsValue[i], i != columnsName.Length - 1 ? "and" : "");
+                    updateString += string.Format(@"{0}={1}{2}", columnsName[i], columnsValue[i], i != columnsName.Length - 1 ? "," : "");
 
                 }
-                updateString = columnsName.Length <= 1 ? "" : ")";
-                string commandString = string.Format(@"Update {0} set {1} Where {2}",tableName, updateString, condition);
+               // updateString = columnsName.Length <= 1 ? "" : ")";
+                string commandString = string.Format(@"Update {0} set {1} From {0} Where {2}",tableName, updateString, condition);
+                command.CommandText = commandString;
+                command.CommandType = CommandType.Text;
 
                 command.ExecuteNonQuery();
                 connection.Close();

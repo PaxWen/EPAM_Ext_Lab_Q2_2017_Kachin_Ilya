@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HMT_1;
 using System.Collections.Generic;
-
+using System.Data;
 
 namespace DALTests
 {
@@ -21,11 +21,38 @@ namespace DALTests
         [TestMethod]
         public void TestGetCustOrdersDetail()
         {
-            HMT_1.DAL test = new HMT_1.DAL();
-            List<CustOrdersDetails> details = new List<CustOrdersDetails>();
-            List<CustOrdersDetails> details2 = test.GetCustOrdersDetail(connectionString, 10248);
-            Assert.AreEqual(details,details2);
+            new HMT_1.DAL().GetCustOrdersDetail(connectionString,10248);
         }
 
+        [TestMethod]
+        public void TestSetOrderDate()
+        {
+            new HMT_1.DAL().SetOrderDate(connectionString, 10248, @"'04.04.1997'");
+        }
+        [TestMethod]
+        public void TestSetShipedDate()
+        {
+            new HMT_1.DAL().SetShipedDate(connectionString, 10248, @"'04.04.1998'");
+        }
+        [TestMethod]
+        public void TestGetOrder()
+        {
+            new HMT_1.DAL().GetOrders(connectionString,new int[] {10248,10249 });
+        }
+        [TestMethod]
+        public void GetDetailedOrder()
+        {
+            new HMT_1.DAL().GetDetailedOrder(connectionString, 10248);
+        }
+        [TestMethod]
+        public void TestGetCustOrderHist()
+        {
+            new HMT_1.DAL().GetCustOrderHist(connectionString, "ANTON");
+        }
+        [TestMethod]
+        public void TestInsert()
+        {
+            new DAL().InsertOrder(connectionString,new Order(11111,"ANTON", 6,new DateTime(1998,6,6),new DateTime(1998,9,6),"Nansy 32"));
+        }
     }
 }

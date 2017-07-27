@@ -8,11 +8,11 @@ namespace HMT_1
 {
     public class CustOrderHist
     {
-        public int CustomerID { get; private set; }
+        public string CustomerID { get; private set; }
         public List<string> ProductName { get; private set; }
         public List<int> Total { get; private set; }
 
-        public CustOrderHist (int customerID,List<string> products, List<int> total)
+        public CustOrderHist (string customerID,List<string> products, List<int> total)
         {
             this.CustomerID = customerID;
             this.ProductName = new List<string>();
@@ -20,7 +20,7 @@ namespace HMT_1
             this.Total = new List<int>();
             this.Total.AddRange(total);
         }
-        public CustOrderHist (int customerID)
+        public CustOrderHist (string customerID)
         {
             this.CustomerID = customerID;
             this.ProductName = new List<string>();

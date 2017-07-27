@@ -8,14 +8,15 @@ namespace HMT_1
 {
     public class Order
     {
+        private DateTime shippedDate;
         public int OrderID { get; private set; }
         public string CustomerID { get; private set; }
         public int EmployeeID { get; private set; }
         public DateTime OrderDate { get; private set; }
         public DateTime ShippedDate {
-            get { return ShippedDate; }
-            set {
-                    ShippedDate = value;
+            get { return shippedDate; }
+            private set {
+                    shippedDate = value;
                     Status = ShippedDate!=null?StatusOrders.Sent:StatusOrders.Delivered;
             }
         }
