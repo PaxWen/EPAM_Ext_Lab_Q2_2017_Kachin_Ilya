@@ -1,5 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using HMT_1;
+using System.Collections.Generic;
+
 
 namespace DALTests
 {
@@ -11,9 +14,18 @@ namespace DALTests
         public void TestGetCounts()
         {
             HMT_1.DAL test = new HMT_1.DAL();
-            int expected = 830;
-            int actual = test.GetCount(connectionString, "Customers");
+            int expected = 91;
+            int actual = test.GetCount(connectionString, "Northwind.Northwind.Customers");
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void TestGetCustOrdersDetail()
+        {
+            HMT_1.DAL test = new HMT_1.DAL();
+            List<CustOrdersDetails> details = new List<CustOrdersDetails>();
+            List<CustOrdersDetails> details2 = test.GetCustOrdersDetail(connectionString, 10248);
+            Assert.AreEqual(details,details2);
+        }
+
     }
 }

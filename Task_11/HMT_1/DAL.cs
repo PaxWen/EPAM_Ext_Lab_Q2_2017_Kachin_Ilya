@@ -28,18 +28,25 @@ namespace HMT_1
     public enum StatusOrders {Sent, Delivered } 
     public class DAL
     {
-        public DataSet GetOrders(string connectionString,int[] ordersID)
+        public List<Order> GetOrders(string connectionString,int[] ordersID)
         {
+            List<Order> orders = new List<Order>();
             string listOrders = "";
             for (int i = 0; i < ordersID.Length; i++)
             {
                 listOrders += ordersID[i].ToString() + (i == ordersID.Length ? "" : ",");
             }
-            string commandString = string.Format(@"Select *,(case when ShippedDate is null then {0} else {1}end ) from Northwind.Northwind.Orders Where OrderID in ({2})", StatusOrders.Sent, StatusOrders.Delivered,listOrders);
+            string commandString = string.Format(@"Select OrderID,CustomerID,EmployeeID,OrderDate,ShippedDate,ShipAddress from Northwind.Northwind.Orders Where OrderID in ({2})", listOrders);
 
-            return SelectManualInput(connectionString, connectionString);
+            DataSet data = new DataSet();
+            data = SelectManualInput(connectionString, connectionString);
+            for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+            {
+                orders.Add(new Order((int)data.Tables[0].Rows[i].ItemArray[0],(string) data.Tables[0].Rows[i].ItemArray[1], (int)data.Tables[0].Rows[i].ItemArray[2],(DateTime) data.Tables[0].Rows[i].ItemArray[3], (DateTime)data.Tables[0].Rows[i].ItemArray[4],(string) data.Tables[0].Rows[i].ItemArray[5]));              
+            }
+            return orders;
         }
-        public DataSet GetCustOrderHist(string connectionString,int CustomerID)
+        public CustOrderHist GetCustOrderHist(string connectionString,int CustomerID)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -74,11 +81,19 @@ namespace HMT_1
                 DataSet data = new DataSet();
                 data.Tables[0].Rows.Add(command.Parameters);
                 connection.Close();
-                return data;
+                CustOrderHist customer = new CustOrderHist(CustomerID);
+                for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+                {
+                    customer.AddProductTotal(
+                         (string)data.Tables[0].Rows[i].ItemArray[0] // productName
+                        , (int) data.Tables[0].Rows[i].ItemArray[1] // Total
+                        );
+                }
+                return customer;
             }
         }
 
-        public DataSet GetCustOrdersDetail(string connectionString, int OrderID)
+        public List<CustOrdersDetails> GetCustOrdersDetail(string connectionString, int OrderID)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -132,7 +147,19 @@ namespace HMT_1
                 DataSet data = new DataSet();
                 data.Tables[0].Rows.Add(command.Parameters);
                 connection.Close();
-                return data;
+
+                List<CustOrdersDetails> orderDetails = new List<CustOrdersDetails>();
+                for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+                {
+                    orderDetails.Add(new CustOrdersDetails(
+                         (string)data.Tables[0].Rows[i].ItemArray[0] // productName
+                        , (double)data.Tables[0].Rows[i].ItemArray[1] // Price
+                        , (int)data.Tables[0].Rows[i].ItemArray[2] // Quality
+                        , (double)data.Tables[0].Rows[i].ItemArray[3] // Discont
+                        , (double)data.Tables[0].Rows[i].ItemArray[4] // ExtendenPrice
+                        ));
+                }
+                return orderDetails;
             }
         }
         public void SetOrderDate(string connectionString, int ordersID,string date)
@@ -144,11 +171,29 @@ namespace HMT_1
         {
             UpdateTable(connectionString, "Northwind.Northwind.Orders", new string[] { "ShippedDate" }, new string[] { date.ToString() }, string.Format("OrderID={0}", ordersID));
         }
-        public DataSet GetDetailedOrder(string connectionString, int ordersID)
+        public List<OrderDetails> GetDetailedOrder(string connectionString, int ordersID)
         {
-            string commandString = string.Format(@"Select *,(case when ShippedDate is null then {0} else {1}end ) from (Northwind.Northwind.Orders join Northwind.Northwind.[Order Details] on Orders.OrderID = [Order Details].OrderID) join Northwind.Northwind.Products on [Order Details].ProductID = Products.ProductID Where OrderID in ({2})", StatusOrders.Sent, StatusOrders.Delivered,ordersID.ToString());
-
-            return SelectManualInput(connectionString, connectionString);
+            string commandString = string.Format(@"Select Orders.OrderID, Orders.CustomerID, Orders.EmployeeID,Orders.OrderDate,Orders.ShippedDate,Orders.ShipAddress, [Order Details].ProductID, Products.ProductName,[Order Details].Quantity, [Order Details].UnitPrice, [Order Details].Discount from (Northwind.Northwind.Orders join Northwind.Northwind.[Order Details] on Orders.OrderID = [Order Details].OrderID) join Northwind.Northwind.Products on [Order Details].ProductID = Products.ProductID Where OrderID in ({2})", StatusOrders.Sent, StatusOrders.Delivered,ordersID.ToString());
+            List<OrderDetails> orders = new List<OrderDetails>();
+            DataSet data = new DataSet();
+            data = SelectManualInput(connectionString, connectionString);
+            for (int i = 0; i < data.Tables[0].Rows.Count; i++)
+            {
+                orders.Add(new OrderDetails(
+                    (int)data.Tables[0].Rows[i].ItemArray[0] //OrderID
+                    , (string)data.Tables[0].Rows[i].ItemArray[1]//CustomerID
+                    , (int)data.Tables[0].Rows[i].ItemArray[2]//EmployeeID
+                    , (DateTime)data.Tables[0].Rows[i].ItemArray[3]//OrderDate
+                    , (DateTime)data.Tables[0].Rows[i].ItemArray[4]//ShippedDate
+                    , (string)data.Tables[0].Rows[i].ItemArray[5]//Address
+                    , (int)data.Tables[0].Rows[i].ItemArray[6]//ProductID
+                    , (string)data.Tables[0].Rows[i].ItemArray[7]//ProductName
+                    , (int)data.Tables[0].Rows[i].ItemArray[8]//Quality
+                    , (double)data.Tables[0].Rows[i].ItemArray[9]//Price
+                    , (double)data.Tables[0].Rows[i].ItemArray[10]//Discont
+                    ));
+            }
+            return orders;
         }
 
         public DataSet SelectFullTable(string connectionString, string tableName)
