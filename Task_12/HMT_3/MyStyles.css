@@ -1,0 +1,79 @@
+
+.mainBlock
+{
+	width: 100 %; 
+	display: table;
+	border: outset 1px black; 
+}
+.block1
+{ 
+    padding: 5px;
+    padding-right: 20px; 
+    float: left;
+	width:200px;
+	height: 100%;
+	
+}
+.endBlock
+{ 
+	display: inline-table;
+    border-top: outset 1px black; 
+	width:100%;
+}
+.middleBlock
+{ 
+    padding-left: 5px; 
+	padding-right: 5px; 
+	padding-top: 5px; 
+	border-left:outset 1px black;
+	border-right:outset 1px black;
+    float: left;
+	width:400px;
+}
+.topper
+{
+	height: 100px;
+    border: outset 1px black; 
+}
+select
+{
+	margin-left: 20px;
+	margin-bottom: 5px;
+}
+.ul1
+{
+	list-style-type: none;
+    list-style-position: inside;
+    color: #A61A00; 
+	line-height: 1.5;
+	margin: 0px;
+}
+.input1 {
+	margin-top: 8px;
+	margin-left: 20px;
+	width: 180px;
+}
+label
+{
+	width: 300px;
+	padding: 5px;
+	padding-bottom: 20px; 
+	margin-top: 35px;
+}
+.check {
+	margin-left: 20px;
+}
+.table1
+{
+	text-align: center;
+	border: outset 1px black; 
+	border-bottom:outset 0px black; 
+	width: 100%;
+	border-collapse: collapse;
+
+}
+  td {  
+	margin: 0px;
+    border: 1px solid black;
+	border-bottom:outset 0px black;
+   }

@@ -1,0 +1,23 @@
+body
+{
+	font-family: Verdana, Arial, Sans-Serif;
+	font-size: medium;
+}
+.block1
+{
+	width: 200px; 
+    background: #ff8040;
+    padding: 5px;
+    padding-right: 20px; 
+    border: outset 2px black; 
+    float: left;	
+	box-shadow: 9px 9px 0px 0px #d26900;
+	border-radius: 10px 10px;
+}
+ul
+{
+	list-style-type: none;
+    list-style-position: inside;
+    color: #A61A00; 
+	line-height: 1.5;
+}

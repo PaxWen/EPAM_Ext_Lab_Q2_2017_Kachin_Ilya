@@ -1,0 +1,46 @@
+body
+{
+	font-family: Verdana, Arial, Sans-Serif;
+	font-size: small;
+}
+.block1
+{
+	width: 400px; 
+    background: #51bbd6;
+    padding: 5px;
+    padding-right: 20px; 
+    border: outset 2px black; 
+    float: left;	
+}
+hr
+{
+	margin: auto;
+	width: 105%;
+	border: 0;
+	border-bottom: 1px solid grey
+
+}
+label
+{
+	width: 300px;
+	padding: 5px;
+	padding-bottom: 20px; 
+	margin-left: 18px;
+	margin-right: 55px;
+}
+
+.input1 {
+	margin: 30 px;
+	margin-left: 20px;
+	width: 265px;
+}
+.input2 {
+	margin: 0 auto;
+	margin-left: 20px;
+	width: 120px;
+}
+.input3 {
+	margin: 0 auto;
+	margin-left: 20px;
+	width: 100px;
+}
