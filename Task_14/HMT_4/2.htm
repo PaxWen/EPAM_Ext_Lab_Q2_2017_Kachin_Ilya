@@ -1,0 +1,29 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+<p>2</p>
+<script src="myScripts.js"></script>
+<div id="div_0"></div>
+<input type="button" id="back" value="<<">
+  <input type="button" id="start" value="start">
+  <input type="button" id="stop" value="Stop">
+  <input type="button" id="forward" value=">>" >
+  <script>
+	journey(
+	document.getElementById('back')
+	,document.getElementById('start')
+	,document.getElementById('stop')
+	,document.getElementById('forward')
+	,"index.htm"
+	,"3.htm"
+	,5000
+	,document.getElementById("div_0")
+	);
+
+  </script>
+</body>
+</html>
