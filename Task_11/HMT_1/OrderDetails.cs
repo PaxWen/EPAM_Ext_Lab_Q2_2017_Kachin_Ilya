@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HMT_1
+namespace HMT_1//todo pn какое-то нелогичное название для DAL
 {
     public class OrderDetails : Order
     {
