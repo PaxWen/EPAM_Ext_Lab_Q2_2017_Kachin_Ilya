@@ -4,12 +4,26 @@
 	width: 100 %; 
 	display: table;
 	border: outset 1px black; 
+	align: center;
 }
 .block1
 { 
     padding: 5px;
     padding-right: 20px; 
     float: left;
+	width:200px;
+	height: 100%;
+	
+}
+.allBlock
+{
+	display:inline-flex;
+}
+.block2
+{ 
+    padding: 5px;
+    padding-right: 20px; 
+    float: right;
 	width:200px;
 	height: 100%;
 	
@@ -28,7 +42,7 @@
 	border-left:outset 1px black;
 	border-right:outset 1px black;
     float: left;
-	width:400px;
+	width:100%;
 }
 .topper
 {
