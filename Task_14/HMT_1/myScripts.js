@@ -2,7 +2,7 @@ function deleteUselles(sentence)
 {
 	var i = 0;
 	var word = "";
-	var matches = ['?',',',' ',';'];
+	var matches = ['?',',',' ',';'];//todo pn ты учел не все символы разделители: ?!:;,.
 	var letterForDelete = [];
 	sentence+=" ";
 	while (i < sentence.length)
